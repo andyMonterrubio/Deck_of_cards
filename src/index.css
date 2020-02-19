@@ -1,0 +1,129 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito&display=swap");
+
+body {
+  margin: 15px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #27ae60;
+}
+
+#root {
+  margin-top: 30px;
+  margin-left: 60px;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.card {
+  display: inline-block;
+  width: 100px;
+  margin: 20px;
+  background-color: transparent;
+  height: 100px;
+  box-shadow: 15px 0px 10px -15px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transform-style: preserve-3d;
+  animation: fadeIn 1s ease;
+  transition: all 0.5s ease;
+}
+
+.card:hover {
+  box-shadow: 0px 15px 15px 4px rgba(0, 0, 0, 0.3);
+  transform: scale(1.11) translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+@keyframes fadeIn {
+  0% {
+    transform: rotateY(90deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+.card img {
+  width: 100%;
+}
+
+.bg-counter {
+  background-color: #1d1d1d;
+  position: fixed;
+  top: 0px;
+  left: 0;
+  width: 50px;
+  text-align: center;
+  box-shadow: 0px 4px 15px 0px rgba(100, 100, 100, 0.5);
+  z-index: 9;
+  bottom: 0;
+  color: white;
+  writing-mode: vertical-rl;
+  line-height: 50px;
+}
+
+.bg-counter p {
+  margin: 8px 0px;
+  transform: rotate(-180deg);
+}
+
+.bg-counter p:before {
+  content: "Queen counter: ";
+  font-family: "Nunito", sans-serif;
+}
+
+#load-a {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #1d1d1d;
+  color: white;
+  z-index: 100;
+  display: none;
+  animation: size 3s ease forwards;
+}
+
+#load-a p {
+  font-family: "Nunito", sans-serif;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  position: absolute;
+  color: white;
+  font-size: 25px;
+}
+
+@keyframes size {
+  0% {
+    transform: scale(0);
+    border-radius: 50%;
+  }
+  10% {
+    transform: scale(1);
+    border-radius: 0;
+  }
+  90% {
+    transform: scale(1);
+    border-radius: 0;
+  }
+  100% {
+    transform: scale(0);
+    border-radius: 50%;
+  }
+}
+
+.done {
+  border: 3px solid #1d1d1d;
+  border-radius: 13px;
+}
