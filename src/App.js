@@ -99,7 +99,7 @@ class App extends React.PureComponent {
   sortCard(hearts, diamonds, spades, clubs) {
     var allCards = document.getElementsByClassName("card");
 
-    for (var j = 0; j < hearts.length; j++) {
+    for (let j = 0; j < hearts.length; j++) {
       if (hearts[j] == "14") {
         hearts[j] = "A";
       } else if (hearts[j] == "13") {
@@ -119,7 +119,7 @@ class App extends React.PureComponent {
       cardCount++;
     }
 
-    for (var k = 0; k < clubs.length; k++) {
+    for (let k = 0; k < clubs.length; k++) {
       if (clubs[k] == "14") {
         clubs[k] = "A";
       } else if (clubs[k] == "13") {
@@ -139,7 +139,7 @@ class App extends React.PureComponent {
       cardCount++;
     }
 
-    for (var y = 0; y < diamonds.length; y++) {
+    for (let y = 0; y < diamonds.length; y++) {
       if (diamonds[y] == "14") {
         diamonds[y] = "A";
       } else if (diamonds[y] == "13") {
@@ -159,7 +159,7 @@ class App extends React.PureComponent {
       cardCount++;
     }
 
-    for (var a = 0; a < spades.length; a++) {
+    for (let a = 0; a < spades.length; a++) {
       if (spades[a] == "14") {
         spades[a] = "A";
       } else if (spades[a] == "13") {
