@@ -1,27 +1,27 @@
 import React from "react";
 import axios from "axios";
-
-var id;
-var queenCount = 0;
-var hearts = [];
-var clubs = [];
-var spades = [];
-var diamonds = [];
-var cardCount = 0;
+import Card from "./components/Card.js"
 
 class App extends React.PureComponent {
   state = {
-    cards: []
+    cards: [], 
+    id: 0, 
+    queenCount: 0, 
+    hearts: [],
+    clubs: [],
+    spades: [],
+    diamonds: [],
+    cardCount: 0
   };
 
   constructor() {
     super();
 
-    //obtengo id
+    //get id 
     axios
       .get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
       .then(res => {
-        id = res.data.deck_id;
+        this.setState({ id: res.data.deck_id })
       })
       .catch(err => console.log(err));
     //*******************************/
@@ -30,18 +30,16 @@ class App extends React.PureComponent {
   componentDidMount() {
     this.interval = setInterval(
       () => this.addCard(window.scrollTo(0, document.body.scrollHeight)),
-      1000
-    );
+      1000);
   }
 
   addCard = () => {
-    if (queenCount < 4) {
-      const { cards } = this.state;
-
+    if (this.state.queenCount < 4) {
       axios
-        .get("https://deckofcardsapi.com/api/deck/" + id + "/draw/?count=1")
+        .get("https://deckofcardsapi.com/api/deck/" + this.state.id + "/draw/?count=1")
         .then(response => {
-          var code;
+          let code;
+          /* CHANGE TO SWITCH */
           if (response.data.cards[0].value == "QUEEN") {
             code = 12;
           } else if (response.data.cards[0].value == "JACK") {
@@ -54,39 +52,59 @@ class App extends React.PureComponent {
             code = response.data.cards[0].value;
           }
 
+          
           if (response.data.cards[0].suit == "HEARTS") {
-            hearts.push(parseInt(code));
+            this.setState(state => ({
+              hearts: [...state.hearts, parseInt(code)]
+            }));
+            //hearts.push(parseInt(code));
           }
 
           if (response.data.cards[0].suit == "CLUBS") {
-            clubs.push(parseInt(code));
+            this.setState(state => ({
+              clubs: [...state.clubs, parseInt(code)]
+            }));
+            //clubs.push(parseInt(code));
           }
 
           if (response.data.cards[0].suit == "SPADES") {
-            spades.push(parseInt(code));
+            this.setState(state => ({
+              spades: [...state.spades, parseInt(code)]
+            }));
+            //spades.push(parseInt(code));
           }
 
           if (response.data.cards[0].suit == "DIAMONDS") {
-            diamonds.push(parseInt(code));
+            this.setState(state => ({
+              diamonds: [...state.diamonds, parseInt(code)]
+            }));
+            //diamonds.push(parseInt(code));
           }
 
           if (response.data.cards[0].value == "QUEEN") {
-            queenCount++;
-            var counter = document.getElementById("counter");
-            counter.innerHTML = queenCount;
+            this.setState((state) => ({
+              queenCount: state.queenCount + 1
+            }));
+            //queenCount++;
+            let counter = document.getElementById("counter");
+            counter.innerHTML = this.state.queenCount;
           }
 
           const newCard = { name: response.data.cards[0].image };
-          const newcards = [...cards, newCard];
-          this.setState({ cards: newcards });
+          this.setState(state => ({
+            cards: [...state.cards, newCard]
+          }));
+
+          /* const newcards = [...copyCards, newCard];
+          this.setState({ cards: newcards }); */
         })
         .catch(err => console.log(err));
     } else {
       clearInterval(this.interval);
-      hearts = hearts.sort(this.sortNumber);
-      diamonds = diamonds.sort(this.sortNumber);
-      spades = spades.sort(this.sortNumber);
-      clubs = clubs.sort(this.sortNumber);
+      let hearts = this.state.hearts.sort(this.sortNumber);
+      let diamonds = this.state.diamonds.sort(this.sortNumber);
+      let spades = this.state.spades.sort(this.sortNumber);
+      let clubs = this.state.clubs.sort(this.sortNumber);
 
       document.getElementById("load-a").style.display = "block";
       setTimeout(() => {
@@ -96,8 +114,8 @@ class App extends React.PureComponent {
     }
   };
 
-  sortCard(hearts, diamonds, spades, clubs) {
-    var allCards = document.getElementsByClassName("card");
+  sortCard = (hearts, diamonds, spades, clubs) => {
+    let allCards = document.getElementsByClassName("card");
 
     for (let j = 0; j < hearts.length; j++) {
       if (hearts[j] == "14") {
@@ -113,10 +131,10 @@ class App extends React.PureComponent {
       }
 
       allCards[j].innerHTML =
-        "<img class='done hearts' src='https://deckofcardsapi.com/static/img/" +
-        hearts[j] +
-        "H.png' />";
-      cardCount++;
+        "<img class='done hearts' src='https://deckofcardsapi.com/static/img/" + hearts[j] + "H.png' />";
+      this.setState((state) => ({
+        cardCount: state.cardCount + 1
+      }));
     }
 
     for (let k = 0; k < clubs.length; k++) {
@@ -132,11 +150,11 @@ class App extends React.PureComponent {
         clubs[k] = "0";
       }
 
-      allCards[cardCount].innerHTML =
-        "<img class='done hearts' src='https://deckofcardsapi.com/static/img/" +
-        clubs[k] +
-        "C.png' />";
-      cardCount++;
+      allCards[this.state.cardCount].innerHTML =
+        "<img class='done hearts' src='https://deckofcardsapi.com/static/img/" + clubs[k] + "C.png' />";
+      this.setState((state) => ({
+        cardCount: state.cardCount + 1
+      }));
     }
 
     for (let y = 0; y < diamonds.length; y++) {
@@ -152,11 +170,12 @@ class App extends React.PureComponent {
         diamonds[y] = "0";
       }
 
-      allCards[cardCount].innerHTML =
-        "<img class='done hearts' src='https://deckofcardsapi.com/static/img/" +
-        diamonds[y] +
-        "D.png' />";
-      cardCount++;
+      allCards[this.state.cardCount].innerHTML =
+        "<img class='done hearts' src='https://deckofcardsapi.com/static/img/" + diamonds[y] + "D.png' />";
+
+      this.setState((state) => ({
+        cardCount: state.cardCount + 1
+      }));
     }
 
     for (let a = 0; a < spades.length; a++) {
@@ -172,11 +191,12 @@ class App extends React.PureComponent {
         spades[a] = "0";
       }
 
-      allCards[cardCount].innerHTML =
-        "<img class='done hearts' src='https://deckofcardsapi.com/static/img/" +
-        spades[a] +
-        "S.png' />";
-      cardCount++;
+      allCards[this.state.cardCount].innerHTML =
+        "<img class='done hearts' src='https://deckofcardsapi.com/static/img/" + spades[a] + "S.png' />";
+    
+      this.setState((state) => ({
+        cardCount: state.cardCount + 1
+      }));
     }
   }
 
@@ -194,13 +214,5 @@ class App extends React.PureComponent {
     );
   }
 }
-
-const Card = ({ name }) => {
-  return (
-    <div className="card">
-      <img src={name} />
-    </div>
-  );
-};
 
 export default App;
