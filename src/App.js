@@ -14,20 +14,15 @@ class App extends React.PureComponent {
     cardCount: 0
   };
 
-  constructor() {
-    super();
-
-    //get id 
+  componentDidMount() {
+    //get id of deck
     axios
       .get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
       .then(res => {
         this.setState({ id: res.data.deck_id })
       })
       .catch(err => console.log(err));
-    //*******************************/
-  }
 
-  componentDidMount() {
     this.interval = setInterval(
       () => this.addCard(window.scrollTo(0, document.body.scrollHeight)),
       1000);
@@ -39,66 +34,63 @@ class App extends React.PureComponent {
         .get("https://deckofcardsapi.com/api/deck/" + this.state.id + "/draw/?count=1")
         .then(response => {
           let code;
-          /* CHANGE TO SWITCH */
-          if (response.data.cards[0].value == "QUEEN") {
-            code = 12;
-          } else if (response.data.cards[0].value == "JACK") {
-            code = 11;
-          } else if (response.data.cards[0].value == "KING") {
-            code = 13;
-          } else if (response.data.cards[0].value == "ACE") {
-            code = 14;
-          } else {
-            code = response.data.cards[0].value;
+          /* obtain code value of card */
+          switch (response.data.cards[0].value) {
+            case "QUEEN":
+              code = 12;
+              //increment Queen counter 
+              this.setState((state) => ({
+                queenCount: state.queenCount + 1
+              }));
+              let counter = document.getElementById("counter");
+              counter.innerHTML = this.state.queenCount;
+              break;
+            case "JACK":
+              code = 11;
+              break;
+            case "KING":
+              code = 13;
+              break;
+            case "ACE":
+              code = 14;
+              break;
+            default:
+              code = response.data.cards[0].value;
+              break;
           }
-
           
-          if (response.data.cards[0].suit == "HEARTS") {
-            this.setState(state => ({
-              hearts: [...state.hearts, parseInt(code)]
-            }));
-            //hearts.push(parseInt(code));
+          /* save card in its suite */
+          switch (response.data.cards[0].suit) {
+            case "HEARTS":
+              this.setState(state => ({
+                hearts: [...state.hearts, parseInt(code)]
+              }));
+              break;
+            case "CLUBS":
+              this.setState(state => ({
+                clubs: [...state.clubs, parseInt(code)]
+              }));
+              break;
+            case "SPADES":
+              this.setState(state => ({
+                spades: [...state.spades, parseInt(code)]
+              }));
+              break;
+            case "DIAMONDS":
+              this.setState(state => ({
+                diamonds: [...state.diamonds, parseInt(code)]
+              }));
+              break;
           }
 
-          if (response.data.cards[0].suit == "CLUBS") {
-            this.setState(state => ({
-              clubs: [...state.clubs, parseInt(code)]
-            }));
-            //clubs.push(parseInt(code));
-          }
-
-          if (response.data.cards[0].suit == "SPADES") {
-            this.setState(state => ({
-              spades: [...state.spades, parseInt(code)]
-            }));
-            //spades.push(parseInt(code));
-          }
-
-          if (response.data.cards[0].suit == "DIAMONDS") {
-            this.setState(state => ({
-              diamonds: [...state.diamonds, parseInt(code)]
-            }));
-            //diamonds.push(parseInt(code));
-          }
-
-          if (response.data.cards[0].value == "QUEEN") {
-            this.setState((state) => ({
-              queenCount: state.queenCount + 1
-            }));
-            //queenCount++;
-            let counter = document.getElementById("counter");
-            counter.innerHTML = this.state.queenCount;
-          }
-
+          //add new card into the deck of cards
           const newCard = { name: response.data.cards[0].image };
           this.setState(state => ({
             cards: [...state.cards, newCard]
           }));
-
-          /* const newcards = [...copyCards, newCard];
-          this.setState({ cards: newcards }); */
         })
         .catch(err => console.log(err));
+
     } else {
       clearInterval(this.interval);
       let hearts = this.state.hearts.sort(this.sortNumber);
@@ -114,64 +106,88 @@ class App extends React.PureComponent {
     }
   };
 
+  sortNumber(a, b) {
+    return a - b;
+  }
+
   sortCard = (hearts, diamonds, spades, clubs) => {
     let allCards = document.getElementsByClassName("card");
 
-    for (let j = 0; j < hearts.length; j++) {
-      if (hearts[j] == "14") {
-        hearts[j] = "A";
-      } else if (hearts[j] == "13") {
-        hearts[j] = "K";
-      } else if (hearts[j] == "12") {
-        hearts[j] = "Q";
-      } else if (hearts[j] == "11") {
-        hearts[j] = "J";
-      } else if (hearts[j] == "10") {
-        hearts[j] = "0";
+    for (let i = 0; i < hearts.length; i++) {
+      //Replace code for letter to obtain the image
+      switch (hearts[i]) {
+        case 14:
+          hearts[i] = "A";
+          break;
+        case 13:
+          hearts[i] = "K";
+          break;
+        case 12:
+          hearts[i] = "Q";
+          break;
+        case 11:
+          hearts[i] = "J";
+          break;
+        case 10:
+          hearts[i] = "0";
+          break;
       }
-
-      allCards[j].innerHTML =
-        "<img class='done hearts' src='https://deckofcardsapi.com/static/img/" + hearts[j] + "H.png' />";
+      
+      allCards[i].innerHTML =
+        "<img class='done' src='https://deckofcardsapi.com/static/img/" + hearts[i] + "H.png' />";
       this.setState((state) => ({
         cardCount: state.cardCount + 1
       }));
     }
 
-    for (let k = 0; k < clubs.length; k++) {
-      if (clubs[k] == "14") {
-        clubs[k] = "A";
-      } else if (clubs[k] == "13") {
-        clubs[k] = "K";
-      } else if (clubs[k] == "12") {
-        clubs[k] = "Q";
-      } else if (clubs[k] == "11") {
-        clubs[k] = "J";
-      } else if (clubs[k] == "10") {
-        clubs[k] = "0";
+    for (let i = 0; i < clubs.length; i++) {
+      //Replace code for letter to obtain the image
+      switch (clubs[i]) {
+        case 14:
+          clubs[i] = "A";
+          break;
+        case 13:
+          clubs[i] = "K";
+          break;
+        case 12:
+          clubs[i] = "Q";
+          break;
+        case 11:
+          clubs[i] = "J";
+          break;
+        case 10:
+          clubs[i] = "0";
+          break;
       }
 
       allCards[this.state.cardCount].innerHTML =
-        "<img class='done hearts' src='https://deckofcardsapi.com/static/img/" + clubs[k] + "C.png' />";
+        "<img class='done' src='https://deckofcardsapi.com/static/img/" + clubs[i] + "C.png' />";
       this.setState((state) => ({
         cardCount: state.cardCount + 1
       }));
     }
 
     for (let y = 0; y < diamonds.length; y++) {
-      if (diamonds[y] == "14") {
-        diamonds[y] = "A";
-      } else if (diamonds[y] == "13") {
-        diamonds[y] = "K";
-      } else if (diamonds[y] == "12") {
-        diamonds[y] = "Q";
-      } else if (diamonds[y] == "11") {
-        diamonds[y] = "J";
-      } else if (diamonds[y] == "10") {
-        diamonds[y] = "0";
+      switch (diamonds[y]) {
+        case 14:
+          diamonds[y] = "A";
+          break;
+        case 13:
+          diamonds[y] = "K";
+          break;
+        case 12:
+          diamonds[y] = "Q";
+          break;
+        case 11:
+          diamonds[y] = "J";
+          break;
+        case 10:
+          diamonds[y] = "0";
+          break;
       }
 
       allCards[this.state.cardCount].innerHTML =
-        "<img class='done hearts' src='https://deckofcardsapi.com/static/img/" + diamonds[y] + "D.png' />";
+        "<img class='done' src='https://deckofcardsapi.com/static/img/" + diamonds[y] + "D.png' />";
 
       this.setState((state) => ({
         cardCount: state.cardCount + 1
@@ -179,37 +195,39 @@ class App extends React.PureComponent {
     }
 
     for (let a = 0; a < spades.length; a++) {
-      if (spades[a] == "14") {
-        spades[a] = "A";
-      } else if (spades[a] == "13") {
-        spades[a] = "K";
-      } else if (spades[a] == "12") {
-        spades[a] = "Q";
-      } else if (spades[a] == "11") {
-        spades[a] = "J";
-      } else if (spades[a] == "10") {
-        spades[a] = "0";
+      switch (spades[a]) {
+        case 14:
+          spades[a] = "A";
+          break;
+        case 13:
+          spades[a] = "K";
+          break;
+        case 12:
+          spades[a] = "Q";
+          break;
+        case 11:
+          spades[a] = "J";
+          break;
+        case 10:
+          spades[a] = "0";
+          break;
       }
 
       allCards[this.state.cardCount].innerHTML =
-        "<img class='done hearts' src='https://deckofcardsapi.com/static/img/" + spades[a] + "S.png' />";
-    
+        "<img class='done' src='https://deckofcardsapi.com/static/img/" + spades[a] + "S.png' />";
+
       this.setState((state) => ({
         cardCount: state.cardCount + 1
       }));
     }
   }
 
-  sortNumber(a, b) {
-    return a - b;
-  }
-
   render() {
     return (
       <div className="app">
-        {this.state.cards.map((t, i) => (
-          <Card key={i} name={t.name} />
-        ))}
+        { this.state.cards.map((t, i) => (
+          <Card key={i} name={t.name} /> ))
+        }
       </div>
     );
   }
