@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
-import Count from "./components/Counter";
-import Loader from "./components/Loader";
+import Count from "./Count";
+import Loader from "./Loader";
 
 ReactDOM.render(<App />, document.getElementById("root"));
 ReactDOM.render(<Count />, document.getElementById("count"));
