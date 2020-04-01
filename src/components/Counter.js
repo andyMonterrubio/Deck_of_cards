@@ -1,6 +1,6 @@
 import React from "react";
 
-function Counter() {
+function Counter(){
   return (
     <div className="bg-counter">
       <p id="counter">0</p>
