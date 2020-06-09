@@ -1,6 +1,9 @@
 # Deck_of_cards
 
-Deck of Cards is an application created using ReactJS
+Deck of Cards is an application developed using ReactJS. 
+You can try it here: [https://codesandbox.io/s/github/andyMonterrubio/Deck_of_cards](https://codesandbox.io/s/github/andyMonterrubio/Deck_of_cards)
+
+If you want to run the application locally, follow the next steps:
 
 ### `npm install`
 
