@@ -1,7 +1,9 @@
 # Deck_of_cards
 
-Deck of Cards is an application developed using ReactJS. 
-You can try it here: [https://codesandbox.io/s/github/andyMonterrubio/Deck_of_cards](https://codesandbox.io/s/github/andyMonterrubio/Deck_of_cards)
+Deck of Cards is an application developed using ReactJS. <br /><br />
+This app draws a deck of cards until 4 Queens are found. Also it sorts the cards by value for each suit. <br />
+
+You can see the online version here: [https://codesandbox.io/s/github/andyMonterrubio/Deck_of_cards](https://codesandbox.io/s/github/andyMonterrubio/Deck_of_cards)
 
 If you want to run the application locally, follow the next steps:
 
